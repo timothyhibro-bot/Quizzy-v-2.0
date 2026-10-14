@@ -1,0 +1,6 @@
+{
+  "name": "Quizzy - AI Interactive 50-Question Quiz & Study Buddy",
+  "description": "Learn anything, play everything. Interactive 50-question AI quizzes with Pip your study buddy, streak tracking, and points leaderboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

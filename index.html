@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quizzy - AI Interactive 50-Question Quiz & Study Buddy</title>
+    <meta name="description" content="Learn anything, play everything. Interactive 50-question AI quizzes with Pip your study buddy and streak tracking." />
+    <meta property="og:title" content="Quizzy - AI Interactive 50-Question Quiz & Study Buddy" />
+    <meta property="og:description" content="Learn anything, play everything. Interactive 50-question AI quizzes with Pip your study buddy and streak tracking." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+  </head>
+  <body class="bg-[#FDF9F3] text-[#1E1A17] antialiased selection:bg-[#FF5A36] selection:text-white min-h-screen flex flex-col font-sans">
+    
+    <!-- Top Header / Navbar (No Leaderboard) -->
+    <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-3 flex items-center justify-between">
+      <div id="btn-home" class="flex items-center gap-2.5 cursor-pointer select-none group" title="Quizzy - Back to Home">
+        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-b from-[#FF6B4A] to-[#F14D2A] flex items-center justify-center shadow-md shadow-[#F14D2A]/25 transition-transform duration-200 group-hover:scale-105 group-active:scale-95 border-b-2 border-[#C93816]">
+          <span class="text-white font-display font-black text-2xl tracking-tighter">Q</span>
+        </div>
+        <span class="font-display font-black text-2xl sm:text-3xl text-[#1E1A17] tracking-tight">quizzy</span>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3.5">
+        <!-- Streak Badge -->
+        <div class="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full border border-[#EBE3D7] shadow-xs text-sm sm:text-base font-bold text-[#1E1A17]">
+          <span class="text-[#FF5A36] text-base sm:text-lg">🔥</span>
+          <span id="header-streak">3 day streak</span>
+        </div>
+
+        <!-- Score Badge -->
+        <div class="flex items-center gap-1.5 px-3 py-2 bg-[#FFF7E8] rounded-full border border-[#FBE3B8] text-sm font-bold text-[#925406]">
+          <span>⭐</span>
+          <span id="header-score">420 XP</span>
+        </div>
+
+        <!-- Sound Button -->
+        <button id="btn-sound" class="p-2 sm:p-2.5 rounded-full bg-white/90 hover:bg-[#F8F3EA] border border-[#EBE3D7] shadow-xs text-sm transition-transform active:scale-90 cursor-pointer" title="Toggle Sound">
+          🔊
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 flex flex-col justify-center">
+
+      <!-- 1. Hero / Home Screen -->
+      <section id="view-home" class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-12 md:py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div class="lg:col-span-7 flex flex-col items-start text-left">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF0E4] border border-[#ECD9C4] text-[#8C5D39] text-xs sm:text-sm font-extrabold uppercase tracking-widest mb-6 shadow-xs">
+              <span>✨</span>
+              <span>PIP, YOUR AI STUDY BUDDY</span>
+            </div>
+
+            <h1 class="font-display font-black text-5xl sm:text-6xl md:text-7xl leading-[1.04] tracking-tight mb-4 text-[#1E1A17]">
+              Learn anything.<br />
+              <span class="text-[#FF5A36]">Play everything.</span>
+            </h1>
+
+            <p class="text-lg sm:text-xl text-[#5C554F] font-medium max-w-xl mb-8 leading-relaxed">
+              Tell Quizzy what you're curious about. Get a 50-question adventure built just for you.
+            </p>
+
+            <!-- Search Form -->
+            <form id="form-topic" class="w-full max-w-2xl bg-white rounded-full p-2 pl-4 sm:pl-5 border-2 border-[#ECE5D8] shadow-lg shadow-[#2E2822]/5 flex items-center gap-2.5 transition-all focus-within:border-[#FF5A36] focus-within:ring-4 focus-within:ring-[#FF5A36]/15">
+              <span class="text-[#8C8885] text-xl font-bold select-none">?</span>
+              <input
+                id="input-topic"
+                type="text"
+                placeholder="What do you want to learn?"
+                class="w-full bg-transparent border-none outline-none text-[#1E1A17] placeholder:text-[#8C8885] font-semibold text-base sm:text-lg py-2"
+                required
+              />
+              <button
+                id="btn-make-quiz"
+                type="submit"
+                class="shrink-0 flex items-center gap-2 px-6 sm:px-8 py-3 rounded-full font-bold text-sm sm:text-base bg-[#FF5A36] hover:bg-[#F04D2A] text-white shadow-md shadow-[#FF5A36]/30 border-b-4 border-[#C93816] btn-tactile cursor-pointer"
+              >
+                <span>Make my quiz</span>
+                <span>→</span>
+              </button>
+            </form>
+
+            <!-- Popular Topic Chips -->
+            <div class="w-full mt-6 flex flex-wrap items-center gap-2">
+              <span class="text-xs sm:text-sm font-bold text-[#8C8885] mr-1">Popular:</span>
+              <button type="button" class="topic-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs sm:text-sm font-semibold text-[#4A4540] border border-[#EBE3D7] hover:border-[#FF5A36]/40 hover:text-[#FF5A36] shadow-xs cursor-pointer" data-prompt="Astrophysics, Space and the Cosmos">
+                <span>🚀</span><span>Astrophysics & Space</span>
+              </button>
+              <button type="button" class="topic-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs sm:text-sm font-semibold text-[#4A4540] border border-[#EBE3D7] hover:border-[#FF5A36]/40 hover:text-[#FF5A36] shadow-xs cursor-pointer" data-prompt="World History and Ancient Civilizations">
+                <span>🏛️</span><span>World History</span>
+              </button>
+              <button type="button" class="topic-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs sm:text-sm font-semibold text-[#4A4540] border border-[#EBE3D7] hover:border-[#FF5A36]/40 hover:text-[#FF5A36] shadow-xs cursor-pointer" data-prompt="JavaScript and Web Development">
+                <span>💻</span><span>JavaScript & Web</span>
+              </button>
+              <button type="button" class="topic-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs sm:text-sm font-semibold text-[#4A4540] border border-[#EBE3D7] hover:border-[#FF5A36]/40 hover:text-[#FF5A36] shadow-xs cursor-pointer" data-prompt="Human Biology and Genetics">
+                <span>🧬</span><span>Biology</span>
+              </button>
+              <button type="button" class="topic-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white text-xs sm:text-sm font-semibold text-[#4A4540] border border-[#EBE3D7] hover:border-[#FF5A36]/40 hover:text-[#FF5A36] shadow-xs cursor-pointer" data-prompt="World Geography, Wonders and Capitals">
+                <span>🌍</span><span>Geography</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Pip Hero Card -->
+          <div class="lg:col-span-5 flex justify-center lg:justify-end relative">
+            <div class="relative w-full max-w-[420px]">
+              <div class="w-full bg-[#FCEEE6]/80 rounded-[36px] p-6 sm:p-10 border border-[#F6DACB] shadow-xl shadow-[#FA7D38]/5 relative overflow-hidden flex flex-col items-center justify-center min-h-[380px]">
+                <div class="absolute top-6 right-6 z-10">
+                  <div class="px-3.5 py-1.5 bg-[#FFF2DE] text-[#844A29] font-black text-xs sm:text-sm rounded-xl border border-[#F3D5B3] shadow-xs rotate-3 animate-bounce">
+                    Let's get curious!
+                  </div>
+                </div>
+
+                <div id="home-pip-container" class="relative z-10 my-auto py-2"></div>
+              </div>
+
+              <!-- Bottom badge: 50 questions / one epic quiz -->
+              <div class="absolute -bottom-5 left-4 sm:left-6 z-20 bg-white px-4 sm:px-5 py-3 rounded-2xl border-2 border-[#EBE3D7] shadow-lg flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#FFF6E5] flex items-center justify-center text-[#E68A00] border border-[#FBE3B8] text-xl">
+                  🏆
+                </div>
+                <div class="text-left">
+                  <p class="font-extrabold text-[#1E1A17] text-sm sm:text-base leading-tight">50 questions</p>
+                  <p class="text-xs sm:text-sm font-semibold text-[#8C8885] leading-tight">one epic quiz</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Loading Screen -->
+      <section id="view-loading" class="hidden w-full max-w-xl mx-auto px-4 py-16 text-center flex flex-col items-center">
+        <div id="loading-pip-container" class="mb-6"></div>
+        <h2 id="loading-topic-name" class="font-display font-black text-2xl sm:text-3xl text-[#1E1A17] mb-2"></h2>
+        <p id="loading-msg" class="text-base text-[#FF5A36] font-bold mb-6">Passing your topic to Gemini AI...</p>
+        <div class="w-full max-w-md h-3.5 bg-[#FAF4E8] rounded-full overflow-hidden border border-[#EBE3D7] p-0.5">
+          <div id="loading-bar" class="h-full bg-gradient-to-r from-[#FF7A45] to-[#FF5A36] rounded-full transition-all duration-500 animate-pulse w-1/4"></div>
+        </div>
+        <p class="text-xs text-[#8C8885] mt-4 font-semibold">Gemini is writing 50 questions with easy, medium, and hard milestones!</p>
+      </section>
+
+      <!-- 3. Error Screen -->
+      <section id="view-error" class="hidden w-full max-w-md mx-auto px-4 py-12 text-center flex flex-col items-center bg-white rounded-3xl border-3 border-[#FECACA] shadow-lg">
+        <div id="error-pip-container" class="mb-4"></div>
+        <h3 class="font-display font-black text-xl text-[#1E1A17] mb-2">Gemini Generation Notice</h3>
+        <p id="error-msg" class="text-sm text-[#5C554F] font-semibold mb-6 px-4"></p>
+        <div class="flex gap-3 w-full">
+          <button id="btn-error-pick" class="flex-1 py-3 px-4 rounded-xl bg-[#FAF4E8] text-[#1E1A17] font-bold text-sm border border-[#EBE3D7] hover:bg-[#F3EDE2] cursor-pointer">Pick Another Topic</button>
+          <button id="btn-error-retry" class="flex-1 py-3 px-4 rounded-xl bg-[#FF5A36] text-white font-bold text-sm shadow-md border-b-2 border-[#C93816] hover:bg-[#F04D2A] cursor-pointer">Retry Gemini</button>
+        </div>
+      </section>
+
+      <!-- 4. Playing 50 MCQs Screen - PIP STANDS DIRECTLY ABOVE THE QUESTIONS -->
+      <section id="view-playing" class="hidden w-full max-w-3xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        
+        <!-- Progress Bar & Checkpoints -->
+        <div class="bg-white rounded-3xl p-4 sm:p-5 border-2 border-[#ECE5D8] shadow-xs mb-5">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div class="flex items-center gap-2">
+              <span id="play-question-num" class="font-display font-black text-lg sm:text-xl text-[#1E1A17]">Question 1 of 50</span>
+              <span id="play-topic-badge" class="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FAF4E8] text-[#8C5D39] border border-[#EBE3D7]"></span>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+              <div id="play-streak-badge" class="px-3 py-1.5 rounded-full text-xs sm:text-sm font-black bg-[#FFF5F2] text-[#FF5A36] border border-[#FCD4D4]">🔥 0 Streak</div>
+              <div id="play-score-badge" class="px-3 py-1.5 rounded-full bg-[#FFF7E8] text-[#B45309] border border-[#FBE3B8] text-xs sm:text-sm font-black">⭐ 0 XP</div>
+              <button id="btn-exit-quiz" class="p-1.5 rounded-xl hover:bg-[#F3EDE2] text-[#8C8885] hover:text-[#1E1A17] cursor-pointer" title="Exit to Home">✕</button>
+            </div>
+          </div>
+          <div class="relative w-full h-3.5 bg-[#FAF4E8] rounded-full overflow-hidden border border-[#EBE3D7]">
+            <div id="play-progress-bar" class="h-full bg-gradient-to-r from-[#FF7A45] via-[#FF5A36] to-[#E63914] rounded-full transition-all duration-300 w-0"></div>
+          </div>
+          <div class="flex justify-between items-center px-1 mt-1.5 text-[10px] font-bold text-[#8C8885]">
+            <span>Start</span>
+            <span>Q10 🏆</span>
+            <span>Q20 ⚡</span>
+            <span>Q30 🎯</span>
+            <span>Q40 🚀</span>
+            <span>Finish 🎓</span>
+          </div>
+        </div>
+
+        <!-- PIP STANDING PROMINENTLY ABOVE THE QUESTION CARD -->
+        <div class="w-full flex flex-col items-center justify-center mb-3 relative select-none">
+          <!-- Pip Speech Bubble above Pip -->
+          <div id="play-pip-speech" class="animate-speech-pop mb-2 px-5 py-2.5 bg-[#FFF6E5] text-[#844A29] font-extrabold text-sm sm:text-base rounded-2xl border-2 border-[#FBE3B8] shadow-md text-center max-w-lg transition-all">
+            Let's tackle this one!
+          </div>
+
+          <!-- Pip Character -->
+          <div id="play-pip-container" class="cursor-pointer transition-transform hover:scale-105 active:scale-95" title="Pip, your study buddy! Ask for a hint below!"></div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="bg-white rounded-[32px] p-6 sm:p-8 border-3 border-[#ECE5D8] shadow-md shadow-[#2E2822]/5">
+          <!-- Top Row: Category, Difficulty & ASK HINT Button -->
+          <div class="flex items-center justify-between gap-2 mb-4 flex-wrap">
+            <div class="flex items-center gap-2">
+              <span id="play-diff-badge" class="px-2.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]">EASY</span>
+              <span id="play-category-badge" class="text-xs font-bold text-[#8C8885] px-2.5 py-1 rounded-full bg-[#FBF6EE] border border-[#EBE3D7]"></span>
+            </div>
+
+            <!-- ASK HINT BUTTON -->
+            <button
+              id="btn-ask-hint"
+              type="button"
+              class="flex items-center gap-1.5 px-4 py-2 rounded-full font-extrabold text-xs sm:text-sm bg-[#FFF4DC] hover:bg-[#FFEEC2] text-[#925406] border-2 border-[#F6D389] border-b-4 border-[#DBA43A] shadow-xs btn-tactile cursor-pointer"
+              title="Ask Pip for a helpful clue!"
+            >
+              <span class="text-base">💡</span>
+              <span>Ask Pip for a Hint</span>
+            </button>
+          </div>
+
+          <!-- Hint Banner when requested -->
+          <div id="play-hint-banner" class="hidden mb-4 p-3.5 rounded-2xl bg-[#FFF9ED] border-2 border-[#F7DB99] text-[#844A29] text-xs sm:text-sm font-semibold flex items-start gap-2.5 animate-speech-pop">
+            <span class="text-lg shrink-0">💡</span>
+            <div>
+              <span class="font-black text-[#925406] block mb-0.5">Pip's Study Clue:</span>
+              <span id="play-hint-text"></span>
+            </div>
+          </div>
+
+          <h2 id="play-question-text" class="font-display font-black text-xl sm:text-2xl md:text-3xl text-[#1E1A17] leading-snug tracking-tight mb-6"></h2>
+          
+          <!-- 4 Multiple Choice Options -->
+          <div id="play-options-container" class="space-y-3"></div>
+        </div>
+
+        <!-- Explanation & Next Question Box -->
+        <div id="play-explanation-box" class="hidden animate-speech-pop bg-white rounded-[28px] p-5 sm:p-6 border-2 border-[#F6DACB] shadow-md space-y-3 mt-4">
+          <div class="flex items-start gap-3">
+            <span class="text-2xl">💡</span>
+            <div>
+              <h4 class="font-display font-black text-base sm:text-lg text-[#1E1A17]">Pip's Explanation</h4>
+              <p id="play-explanation-text" class="text-sm sm:text-base text-[#5C554F] font-semibold mt-1 leading-relaxed"></p>
+            </div>
+          </div>
+          <div class="bg-[#FAF4E8] rounded-xl p-3 border border-[#EBE3D7] text-xs sm:text-sm text-[#7A5034] font-medium flex items-center gap-2">
+            <span>🌟</span>
+            <span><strong>Fun Fact:</strong> <span id="play-fun-fact-text"></span></span>
+          </div>
+          <div class="pt-2 flex justify-end">
+            <button id="btn-next-question" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-[#FF5A36] hover:bg-[#F04D2A] text-white font-black text-base shadow-md shadow-[#FF5A36]/30 border-b-4 border-[#C93816] btn-tactile cursor-pointer">
+              Next Question →
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 5. Completed Screen -->
+      <section id="view-completed" class="hidden w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div class="bg-white rounded-[36px] border-4 border-[#F0E5D3] p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
+          <div id="complete-pip-container" class="flex flex-col items-center"></div>
+          <h1 class="font-display font-black text-3xl sm:text-5xl text-[#1E1A17] mt-3 mb-2 tracking-tight">Quiz Adventure Complete!</h1>
+          <p id="complete-topic-text" class="text-base sm:text-lg text-[#5C554F] font-semibold max-w-lg mx-auto mb-8"></p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-2xl mx-auto mb-8">
+            <div class="bg-[#F0FDF4] p-4 rounded-2xl border border-[#BBF7D0]">
+              <span class="text-xs font-bold text-[#166534] uppercase">Accuracy</span>
+              <p id="complete-accuracy" class="font-display font-black text-2xl sm:text-3xl text-[#15803D] mt-1">100%</p>
+              <span id="complete-correct-tally" class="text-[11px] font-semibold text-[#166534]">50 / 50</span>
+            </div>
+            <div class="bg-[#FFF7E8] p-4 rounded-2xl border border-[#FBE3B8]">
+              <span class="text-xs font-bold text-[#925406] uppercase">Total Earned</span>
+              <p id="complete-score" class="font-display font-black text-2xl sm:text-3xl text-[#B45309] mt-1">+500 XP</p>
+              <span class="text-[11px] font-semibold text-[#925406]">XP Points</span>
+            </div>
+            <div class="bg-[#FFF5F2] p-4 rounded-2xl border border-[#FCD4D4]">
+              <span class="text-xs font-bold text-[#991B1B] uppercase">Best Streak</span>
+              <p id="complete-streak" class="font-display font-black text-2xl sm:text-3xl text-[#DC2626] mt-1">🔥 10</p>
+              <span class="text-[11px] font-semibold text-[#991B1B]">in a row</span>
+            </div>
+            <div class="bg-[#F8FAFC] p-4 rounded-2xl border border-[#E2E8F0]">
+              <span class="text-xs font-bold text-[#475569] uppercase">Milestones</span>
+              <p class="font-display font-black text-2xl sm:text-3xl text-[#0F172A] mt-1">5 / 5</p>
+              <span class="text-[11px] font-semibold text-[#475569]">All Cleared</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-10">
+            <button id="btn-retake" class="px-6 py-3.5 rounded-2xl bg-white hover:bg-[#FAF4E8] text-[#1E1A17] font-extrabold text-sm sm:text-base border-2 border-[#EBE3D7] border-b-4 btn-tactile cursor-pointer">Retake 50 Quiz</button>
+            <button id="btn-new-topic" class="px-7 py-3.5 rounded-2xl bg-[#FF5A36] hover:bg-[#F04D2A] text-white font-extrabold text-sm sm:text-base border-b-4 border-[#C93816] shadow-lg shadow-[#FF5A36]/30 btn-tactile cursor-pointer">Learn New Topic</button>
+          </div>
+
+          <!-- Review Accordion -->
+          <div class="text-left border-t-2 border-[#F0E5D3] pt-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+              <div>
+                <h3 class="font-display font-black text-xl text-[#1E1A17]">Review All 50 Questions</h3>
+                <p class="text-xs sm:text-sm font-semibold text-[#8C8885]">Check every question, explanation, and answer</p>
+              </div>
+              <div class="flex items-center gap-1.5 bg-[#FAF4E8] p-1 rounded-xl border border-[#EBE3D7]">
+                <button id="btn-filter-all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-[#1E1A17] shadow-xs cursor-pointer">All (50)</button>
+                <button id="btn-filter-correct" class="px-3 py-1.5 rounded-lg text-xs font-bold text-[#8C8885] cursor-pointer">Correct</button>
+                <button id="btn-filter-wrong" class="px-3 py-1.5 rounded-lg text-xs font-bold text-[#8C8885] cursor-pointer">Incorrect</button>
+              </div>
+            </div>
+            <div id="review-list" class="space-y-3"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Milestone Modal -->
+    <div id="modal-milestone" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
+      <div class="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border-4 border-[#F6DACB] shadow-2xl flex flex-col items-center text-center">
+        <span class="text-4xl mb-2">🏆</span>
+        <div id="milestone-pip-container" class="my-2"></div>
+        <h3 id="milestone-title" class="font-display font-black text-2xl text-[#1E1A17] mb-1"></h3>
+        <p id="milestone-subtitle" class="text-sm text-[#5C554F] font-medium mb-6"></p>
+
+        <div class="w-full grid grid-cols-2 gap-3 mb-6">
+          <div class="bg-[#FFF9F2] p-3 rounded-2xl border border-[#FBE3B8] flex flex-col items-center">
+            <span class="text-xs font-bold text-[#8C5D39] uppercase">Bonus XP</span>
+            <span id="milestone-bonus" class="text-[#E68A00] font-black text-lg">+50 XP</span>
+          </div>
+          <div class="bg-[#FFF5F2] p-3 rounded-2xl border border-[#FCD4D4] flex flex-col items-center">
+            <span class="text-xs font-bold text-[#9C3A24] uppercase">Streak</span>
+            <span id="milestone-streak" class="text-[#FF5A36] font-black text-lg">🔥 10</span>
+          </div>
+        </div>
+
+        <button id="btn-milestone-continue" class="w-full py-3.5 px-6 rounded-2xl bg-[#FF5A36] hover:bg-[#F04D2A] text-white font-extrabold text-base shadow-lg shadow-[#FF5A36]/30 border-b-4 border-[#C93816] btn-tactile cursor-pointer">
+          Continue Question →
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full py-5 text-center text-xs font-semibold text-[#8C8885] border-t border-[#EBE3D7]/60">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span>Built with Pip &amp; Quizzy</span>
+          <span>•</span>
+          <span>Powered by Google Gemini AI</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span>50 MCQs AI Interactive Adventure</span>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
